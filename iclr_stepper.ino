@@ -1,6 +1,4 @@
 
-
-
 // Include necessary libraries
 #include <BasicStepperDriver.h> // https://github.com/laurb9/StepperDriver
 #include <Wire.h>
@@ -24,10 +22,20 @@
 // 2-wire basic config, microstepping is hardwired on the driver
 BasicStepperDriver stepper(MOTOR_STEPS, DIR, STEP);
 
-// define yaw pitch and roll
-float pitch = 0;
-float roll = 0;
-float yaw = 0;
+// definitions 
+
+float pitch_g = 0;
+float roll_g = 0;
+float yaw_g = 0;
+
+float heading;
+float roll_a;
+float pitch_a;
+float Mx;
+float My;
+
+float yaw_f = 0;
+
 
 // Timers
 unsigned long timer = 0;
@@ -80,28 +88,12 @@ void loop()
    // insert the chosen way to calculate yaw rate 
    imu.readGyro();
    
-   yaw = yaw + imu.calcGyro(imu.gz)*timeStep;
-   roll = roll + imu.calcGyro(imu.gx)*timeStep;
-   pitch = pitch + imu.calcGyro(imu.gy)*timeStep;
-
-   // Output in degrees
-   Serial.print(" Outputs obtained using Gyroscope readings");
-   Serial.print(" Pitch = ");
-   Serial.print(pitch);
-   Serial.print(" Roll = ");
-   Serial.print(roll);  
-   Serial.print(" Yaw = ");
-   Serial.println(yaw);
-
-   // making the stepper rotate by relative position
-   stepper.rotate(imu.calcGyro(imu.gz)*timeStep)
+   yaw_g = yaw_g + imu.calcGyro(imu.gz)*timeStep;
+   roll_g = roll_g + imu.calcGyro(imu.gx)*timeStep;
+   pitch_g = pitch_g + imu.calcGyro(imu.gy)*timeStep;
 
 
-
-
-
-
-   // As a comparison, accelerometer and magnetometer data can be used. This can be used to compare difference between methods
+   // Accelerometer and magnetometer data can also be used. This can be used to compare difference between methods. Tilt compensation for the headign angle is also added
    imu.readAccel();
    imu.readMag();
 
@@ -111,14 +103,13 @@ void loop()
    float mx = imu.calcMag(imu.mx)
    float my = imu.calcMag(imu.my)
 
-   float roll2 = atan2(ay, az);
-   float pitch2 = atan2(-ax, sqrt(ay * ay + az * az));
+   roll_a = atan2(ay, az);
+   pitch_a = atan2(-ax, sqrt(ay * ay + az * az));
   
-   float heading;
-   if (my == 0)
-    heading = (mx < 0) ? PI : 0;
-   else
-    heading = atan2(mx, my);
+   Mx = mx*cos(pitch_a) + mz*sin(pitch_a);
+   My = mx*sin(roll_a)*sin(pitch_a) + my*cos(roll_a) - mz*sin(roll_a)*cos(pitch_a)
+
+   heading = atan(-My/Mx);
     
    heading -= DECLINATION * PI / 180;
   
@@ -127,17 +118,14 @@ void loop()
   
   // Convert everything from radians to degrees:
   heading *= 180.0 / PI;
-  pitch2 *= 180.0 / PI;
-  roll2  *= 180.0 / PI;
+  pitch_a *= 180.0 / PI;
+  roll_a  *= 180.0 / PI;
 
-  // Printing results as comparison
-  Serial.print(" Outputs obtained using Accelerometer and Magnetometer readings ")
-  Serial.print(" Pitch = ");
-  Serial.print(heading);
-  Serial.print(" Roll = ");
-  Serial.print(roll2);  
-  Serial.print(" Yaw = ");
-  Serial.println(yaw2);
+// accelerometer performs the best with low frequency while gyroscope
+performs the best with high frequency. A complimentary filter can be used. The gains can be adjusted with experiments
+
+yaw_f = 0.98*(yaw_f + imu.calcGyro(imu.gz)*timeStep) + 0.02*heading;
+
 
    
 }   
