@@ -1,4 +1,3 @@
-
 // Include necessary libraries
 #include <BasicStepperDriver.h> // https://github.com/laurb9/StepperDriver
 #include <Wire.h>
@@ -97,17 +96,18 @@ void loop()
    imu.readAccel();
    imu.readMag();
 
-   float ay = imu.calcAccel(imu.ay)
-   float az = imu.calcAccel(imu.az)
-   float ax = imu.calcAccel(imu.ax)
-   float mx = imu.calcMag(imu.mx)
-   float my = imu.calcMag(imu.my)
+   float ay = imu.calcAccel(imu.ay);
+   float az = imu.calcAccel(imu.az);
+   float ax = imu.calcAccel(imu.ax);
+   float mx = imu.calcMag(imu.mx);
+   float my = imu.calcMag(imu.my);
+   float mz = imu.calcMag(imu.mz);
 
    roll_a = atan2(ay, az);
    pitch_a = atan2(-ax, sqrt(ay * ay + az * az));
   
    Mx = mx*cos(pitch_a) + mz*sin(pitch_a);
-   My = mx*sin(roll_a)*sin(pitch_a) + my*cos(roll_a) - mz*sin(roll_a)*cos(pitch_a)
+   My = mx*sin(roll_a)*sin(pitch_a) + my*cos(roll_a) - mz*sin(roll_a)*cos(pitch_a);
 
    heading = atan(-My/Mx);
     
@@ -122,11 +122,15 @@ void loop()
   roll_a  *= 180.0 / PI;
 
 // accelerometer performs the best with low frequency while gyroscope
-performs the best with high frequency. A complimentary filter can be used. The gains can be adjusted with experiments
+// performs the best with high frequency. A complimentary filter can be used. The gains can be adjusted with experiments
 
-yaw_f = 0.98*(yaw_f + imu.calcGyro(imu.gz)*timeStep) + 0.02*heading;
+   yaw_f = 0.98*(yaw_f + imu.calcGyro(imu.gz)*timeStep) + 0.02*heading;
 
 
-   
+   delay((timeStep*1000) - (millis() - timer));   
 }   
-    delay((timeStep*1000) - (millis() - timer));
+
+
+
+
+ 
