@@ -25,13 +25,16 @@ BasicStepperDriver stepper(MOTOR_STEPS, DIR, STEP);
 
 LSM9DS1 imu;
 
+float beta(0.1f);
+float dt(0.001f);
 
 // initialize a Madgwick filter:
-Madgwick filter;
+Madgwick filter(beta,dt);
 
 #define LSM9DS1_M  0x1E // Would be 0x1C if SDO_M is LOW
 #define LSM9DS1_AG 0x6B // Would be 0x6A if SDO_AG is LOW
 
+int prev_time;
 
 #define PRINT_CALCULATED
 //#define PRINT_RAW
@@ -69,29 +72,42 @@ void setup()
 void loop()
 {
   // Update the sensor values whenever new data is available
-  if ( imu.gyroAvailable() )
-  {
-    imu.readGyro();
-    xGyro = imu.calcGyro(imu.gx);
-    yGyro = imu.calcGyro(imu.gy);
-    zGyro = imu.calcGyro(imu.gz);
+  if (millis()-prev_time > dt){
+    prev_time = millis();
+    if ( imu.gyroAvailable() )
+    {
+        imu.readGyro();
+        xGyro = imu.calcGyro(imu.gx);
+        yGyro = imu.calcGyro(imu.gy);
+        zGyro = imu.calcGyro(imu.gz);
+        
+    }
+    if ( imu.accelAvailable() )
+    {
+        imu.readAccel();
+        xAcc = imu.calcAccel(imu.ax);
+        yAcc = imu.calcAccel(imu.ay);
+        zAcc = imu.calcAccel(imu.az);
+        
+    }
+     if ( imu.magAvailable() )
+    {
+        imu.readMag();
+        xMag = imu.calcAccel(imu.mx);
+        yMag = imu.calcAccel(imu.my);
+        zMag = imu.calcAccel(imu.mz);
+        
+    }
+
     
+    filter.update(xGyro, yGyro, zGyro, xAcc, yAcc, zAcc, xMag, yMag, zMag);
+    //filter.updateIMU();
+
+        // print the heading, pitch and roll
+        roll = filter.getRoll();
+        pitch = filter.getPitch();
+        heading = filter.getYaw();
+
+        stepper.rotate(heading);
   }
-  if ( imu.accelAvailable() )
-  {
-    imu.readAccel();
-    xAcc = imu.calcAccel(imu.ax);
-    yAcc = imu.calcAccel(imu.ay);
-    zAcc = imu.calcAccel(imu.az);
-    
-  }
-   filter.updateIMU(xGyro, yGyro, zGyro, xAcc, yAcc, zAcc);
-
-    // print the heading, pitch and roll
-    roll = filter.getRoll();
-    pitch = filter.getPitch();
-    heading = filter.getYaw();
-
-    stepper.rotate(heading);
-
 }
