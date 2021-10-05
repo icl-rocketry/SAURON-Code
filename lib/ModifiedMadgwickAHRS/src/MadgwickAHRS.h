@@ -52,5 +52,8 @@ public:
     void update(float gx, float gy, float gz, float ax, float ay, float az, float mx, float my, float mz);
     void updateIMU(float gx, float gy, float gz, float ax, float ay, float az);
     
+    float getRoll();
+    float getPitch();
+    float getYaw();
 };
 #endif

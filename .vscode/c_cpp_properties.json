@@ -1,0 +1,74 @@
+//
+// !!! WARNING !!! AUTO-GENERATED FILE!
+// PLEASE DO NOT MODIFY IT AND USE "platformio.ini":
+// https://docs.platformio.org/page/projectconf/section_env_build.html#build-flags
+//
+{
+    "configurations": [
+        {
+            "name": "PlatformIO",
+            "includePath": [
+                "/home/dan/Documents/SAURON-Code/include",
+                "/home/dan/Documents/SAURON-Code/src",
+                "/home/dan/Documents/SAURON-Code/lib/ModifiedMadgwickAHRS/src",
+                "/home/dan/Documents/SAURON-Code/.pio/libdeps/atmega32u4/StepperDriver/src",
+                "/home/dan/Documents/SAURON-Code/.pio/libdeps/atmega32u4/SparkFun LSM9DS1 IMU/src",
+                "/home/dan/.platformio/packages/framework-arduino-avr-mightycore/libraries/SPI/src",
+                "/home/dan/.platformio/packages/framework-arduino-avr-mightycore/libraries/Wire/src",
+                "/home/dan/.platformio/packages/framework-arduino-avr-mightycore/cores/MightyCore",
+                "/home/dan/.platformio/packages/framework-arduino-avr-mightycore/variants/standard",
+                "/home/dan/.platformio/packages/framework-arduino-avr-mightycore/libraries/AVR_examples/src",
+                "/home/dan/.platformio/packages/framework-arduino-avr-mightycore/libraries/EEPROM/src",
+                "/home/dan/.platformio/packages/framework-arduino-avr-mightycore/libraries/Optiboot_flasher/src",
+                "/home/dan/.platformio/packages/framework-arduino-avr-mightycore/libraries/SD/src",
+                "/home/dan/.platformio/packages/framework-arduino-avr-mightycore/libraries/SPI1/src",
+                "/home/dan/.platformio/packages/framework-arduino-avr-mightycore/libraries/Servo/src",
+                "/home/dan/.platformio/packages/framework-arduino-avr-mightycore/libraries/SoftwareSerial/src",
+                "/home/dan/.platformio/packages/framework-arduino-avr-mightycore/libraries/Timer/src",
+                "/home/dan/.platformio/packages/framework-arduino-avr-mightycore/libraries/Wire1/src",
+                ""
+            ],
+            "browse": {
+                "limitSymbolsToIncludedHeaders": true,
+                "path": [
+                    "/home/dan/Documents/SAURON-Code/include",
+                    "/home/dan/Documents/SAURON-Code/src",
+                    "/home/dan/Documents/SAURON-Code/lib/ModifiedMadgwickAHRS/src",
+                    "/home/dan/Documents/SAURON-Code/.pio/libdeps/atmega32u4/StepperDriver/src",
+                    "/home/dan/Documents/SAURON-Code/.pio/libdeps/atmega32u4/SparkFun LSM9DS1 IMU/src",
+                    "/home/dan/.platformio/packages/framework-arduino-avr-mightycore/libraries/SPI/src",
+                    "/home/dan/.platformio/packages/framework-arduino-avr-mightycore/libraries/Wire/src",
+                    "/home/dan/.platformio/packages/framework-arduino-avr-mightycore/cores/MightyCore",
+                    "/home/dan/.platformio/packages/framework-arduino-avr-mightycore/variants/standard",
+                    "/home/dan/.platformio/packages/framework-arduino-avr-mightycore/libraries/AVR_examples/src",
+                    "/home/dan/.platformio/packages/framework-arduino-avr-mightycore/libraries/EEPROM/src",
+                    "/home/dan/.platformio/packages/framework-arduino-avr-mightycore/libraries/Optiboot_flasher/src",
+                    "/home/dan/.platformio/packages/framework-arduino-avr-mightycore/libraries/SD/src",
+                    "/home/dan/.platformio/packages/framework-arduino-avr-mightycore/libraries/SPI1/src",
+                    "/home/dan/.platformio/packages/framework-arduino-avr-mightycore/libraries/Servo/src",
+                    "/home/dan/.platformio/packages/framework-arduino-avr-mightycore/libraries/SoftwareSerial/src",
+                    "/home/dan/.platformio/packages/framework-arduino-avr-mightycore/libraries/Timer/src",
+                    "/home/dan/.platformio/packages/framework-arduino-avr-mightycore/libraries/Wire1/src",
+                    ""
+                ]
+            },
+            "defines": [
+                "PLATFORMIO=50200",
+                "ARDUINO_AVR_ATmega32",
+                "F_CPU=16000000L",
+                "ARDUINO_ARCH_AVR",
+                "ARDUINO=10808",
+                "__AVR_ATmega32__",
+                ""
+            ],
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "compilerPath": "/home/dan/.platformio/packages/toolchain-atmelavr/bin/avr-gcc",
+            "compilerArgs": [
+                "-mmcu=atmega32",
+                ""
+            ]
+        }
+    ],
+    "version": 4
+}
