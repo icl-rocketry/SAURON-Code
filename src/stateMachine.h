@@ -28,10 +28,10 @@ class stateMachine {
     Madgwick filter;
     BasicStepperDriver stepper;
     
+    uint64_t prev_time;
+    
   private:
     State* _currStatePtr;
-
-    uint64_t prev_time;
 };
 
 #endif

@@ -30,6 +30,10 @@ State* flight::update() {
       zMag = _sm -> imu.calcAccel(_sm -> imu.mz);
     }
 
+    // Get actual dt
+    uint32_t actualDt = millis() - _sm->prev_time;
+    _sm -> filter.setDeltaT(actualDt);
+
     _sm -> filter.update(xGyro, yGyro, zGyro, xAcc, yAcc, zAcc, xMag, yMag, zMag);
     //filter.update_sm -> imu();
 

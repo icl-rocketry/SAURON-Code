@@ -236,6 +236,7 @@ float Madgwick::invSqrt(float x) {
 	// y = y * (1.5f - (halfx * y * y));
 	// return y;
 
+	// Quake tactics bruv
 	/* close-to-optimal  method with low cost from http://pizer.wordpress.com/2008/10/12/fast-inverse-square-root */
 	unsigned int i = 0x5F1F1412 - (*(unsigned int*)&x >> 1);
 	float tmp = *(float*)&i;
