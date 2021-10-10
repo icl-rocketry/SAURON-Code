@@ -7,6 +7,8 @@ State(sm)
 {}
 
 void preLaunch::initialise() {
+  Serial.println("PreLaunch state");
+  _sm -> imu.calibrate(true);
 };
 
 State* preLaunch::update() {
@@ -20,11 +22,13 @@ State* preLaunch::update() {
       zAcc = _sm -> imu.calcAccel(_sm -> imu.az);
     }
 
-    if (zAcc > ACCEL_THRESHOLD) {
-        return new flight(_sm); 
-    } else {
-        return this;
-    }
+    //delay(10000);
+    _sm -> filter.reset();
+    //if (zAcc > ACCEL_THRESHOLD) {
+      return new flight(_sm); 
+    //} else {
+        //return this;
+    //}
 };
 
 void preLaunch::exitState() {

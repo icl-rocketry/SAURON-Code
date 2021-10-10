@@ -19,10 +19,10 @@ stateMachine::stateMachine() : imu(),
 void stateMachine::initialise(State *initStatePtr)
 {
 
-  Serial.begin(115200);
+  Serial.begin(9600);
 
   Serial.println("Initialising IMU and Stepper...");
-
+  
   if (imu.begin() == false) // with no arguments, this uses default addresses (AG:0x6B, M:0x1E) and i2c port (Wire).
   {
     Serial.println("Failed to communicate with LSM9DS1.");
@@ -34,6 +34,33 @@ void stateMachine::initialise(State *initStatePtr)
     while (1)
       ;
   }
+
+  imu.setAccelScale(16);
+  //set samplerate of accel to 476Hz
+  imu.settings.accel.sampleRate = 5;
+  imu.settings.accel.enabled = true; // Enable accelerometer
+  
+  imu.setGyroScale(2000);
+  //set samplerate of gyro to 476Hz
+  imu.settings.gyro.sampleRate = 5;
+  imu.settings.gyro.lowPowerEnable = false;
+  //imu.settings.accel.enabled = false; // Enable accelerometer
+  // [HPFEnable] enables or disables the high-pass filter
+  //imu.settings.gyro.HPFEnable = true; // HPF disabled
+  // [HPFCutoff] sets the HPF cutoff frequency (if enabled)
+  // Allowable values a*57.29577951re 0-9. Value depends on ODR.
+  // (Datasheet section 7.14)
+  //imu.settings.gyro.HPFCutoff = 1; // HPF cutoff = 4Hz
+
+  imu.setMagScale(12);
+  //imu.setMagScale(12);
+  imu.settings.mag.XYPerformance = 3; // Ultra-high perform.
+  imu.settings.mag.ZPerformance = 3; // Ultra-high perform.
+  imu.settings.mag.sampleRate = 7;
+  imu.settings.mag.lowPowerEnable = false;
+  imu.settings.mag.operatingMode = 0; // Continuous mode
+  //mag temp compensation -> this is a good thing right?
+  imu.settings.mag.tempCompensationEnable = true;
 
   // set stepper motor speed and microsteps
   stepper.setRPM(100);

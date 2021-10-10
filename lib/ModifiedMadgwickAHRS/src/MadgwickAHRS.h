@@ -35,11 +35,7 @@ private:
     float yaw;
 
     char anglesComputed;
-    void computeAngles();
-
-   
-
-
+    
 public:
 
     Madgwick(float beta_value=0.1f,float dt=.002); // custom constructor with default values
@@ -52,6 +48,8 @@ public:
     void update(float gx, float gy, float gz, float ax, float ay, float az, float mx, float my, float mz);
     void updateIMU(float gx, float gy, float gz, float ax, float ay, float az);
     
+    void computeAngles();
+
     float getRoll();
     float getPitch();
     float getYaw();

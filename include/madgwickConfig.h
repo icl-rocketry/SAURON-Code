@@ -1,5 +1,5 @@
-#define beta 0.1
-#define dt 0.001
+#define beta .8
+#define dt 0.01
 
 #define ACCEL_THRESHOLD 100
 

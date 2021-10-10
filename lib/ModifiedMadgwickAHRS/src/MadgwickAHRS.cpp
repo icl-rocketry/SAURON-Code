@@ -19,6 +19,7 @@
 
 #include "MadgwickAHRS.h"
 #include <math.h>
+#include "Arduino.h"
 
 Madgwick::Madgwick(float beta_value,float dt):
 beta(beta_value),
@@ -127,7 +128,6 @@ void Madgwick::update(float gx, float gy, float gz, float ax, float ay, float az
 	}
 
 	// Integrate rate of change of quaternion to yield quaternion
-	
 	q0 += qDot1 * invSampleFreq;
 	q1 += qDot2 * invSampleFreq;
 	q2 += qDot3 * invSampleFreq;
@@ -141,6 +141,13 @@ void Madgwick::update(float gx, float gy, float gz, float ax, float ay, float az
 	q2 *= recipNorm;
 	q3 *= recipNorm;
 	anglesComputed = 0;
+
+	/*
+	static int i = 0;
+	i++;
+	if (i > 10) {
+		while(1);
+	} */
 }
 
 //-------------------------------------------------------------------------------------------
@@ -157,7 +164,7 @@ void Madgwick::updateIMU(float gx, float gy, float gz, float ax, float ay, float
 	gy *= 0.0174533f;
 	gz *= 0.0174533f;
 
-	// Rate of change of quaternion from gyroscope
+	// Rate of change of quaternion from 
 	qDot1 = 0.5f * (-q1 * gx - q2 * gy - q3 * gz);
 	qDot2 = 0.5f * (q0 * gx + q2 * gz - q3 * gy);
 	qDot3 = 0.5f * (q0 * gy - q1 * gz + q3 * gx);
@@ -227,26 +234,29 @@ void Madgwick::updateIMU(float gx, float gy, float gz, float ax, float ay, float
 
 float Madgwick::invSqrt(float x) {
 	
-	// float halfx = 0.5f * x;
-	// float y = x;
-	// long i = *(long*)&y;
-	// i = 0x5f3759df - (i>>1);
-	// y = *(float*)&i;
-	// y = y * (1.5f - (halfx * y * y));
-	// y = y * (1.5f - (halfx * y * y));
-	// return y;
+	float halfx = 0.5f * x;
+	float y = x;
+	long i = *(long*)&y;
+	i = 0x5f3759df - (i>>1);
+	y = *(float*)&i;
+	y = y * (1.5f - (halfx * y * y));
+	 y = y * (1.5f - (halfx * y * y));
+	 return y;
 
 	// Quake tactics bruv
 	/* close-to-optimal  method with low cost from http://pizer.wordpress.com/2008/10/12/fast-inverse-square-root */
-	unsigned int i = 0x5F1F1412 - (*(unsigned int*)&x >> 1);
-	float tmp = *(float*)&i;
-	return tmp * (1.69000231f - 0.714158168f * x * tmp * tmp);
+	//unsigned int i = 0x5F1F1412 - (*(unsigned int*)&x >> 1);
+	//float tmp = *(float*)&i;
+	//return tmp * (1.69000231f - 0.714158168f * x * tmp * tmp);
+
+	//return 1/sqrt(x);
  }
 
 //-------------------------------------------------------------------------------------------
 
 void Madgwick::computeAngles()
 {
+	
 	roll = atan2f(q0*q1 + q2*q3, 0.5f - q1*q1 - q2*q2);
 	pitch = asinf(-2.0f * (q1*q3 - q0*q2));
 	yaw = atan2f(q1*q2 + q0*q3, 0.5f - q2*q2 - q3*q3);
