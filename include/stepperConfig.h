@@ -8,4 +8,4 @@
 
 // Since microstepping is set externally, make sure this matches the selected mode
 // 1=full step, 2=half step etc.
-#define MICROSTEPS 4
+#define MICROSTEPS 16

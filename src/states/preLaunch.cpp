@@ -19,7 +19,7 @@ State* preLaunch::update() {
       _sm -> imu.readAccel();
       //float xAcc = _sm -> imu.calcAccel(imu.ax);
       //float yAcc = _sm -> imu.calcAccel(imu.ay);
-      zAcc = _sm -> imu.calcAccel(_sm -> imu.az);
+      zAcc = _sm -> imu.calcAccel(_sm -> imu.az); //TODO: use calibrated?
     }
 
     //delay(10000);
