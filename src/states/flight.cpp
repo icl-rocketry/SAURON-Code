@@ -77,8 +77,22 @@ State *flight::update()
   float pitch = _sm->filter.getPitch();
   float heading = _sm->filter.getYaw();
 
-  if ((millis() - stepperPrevTime) > 0.1){
-    _sm -> stepper.rotate(heading*57.29577951);
+  if ((millis() - stepperPrevTime) > .1){
+    // Heading wrap-around error-catching
+    if (heading*PrevHeading < 0 && heading > 2) {
+      // Wrapping from negative to positive
+      DiffHeading = (heading-PrevHeading-2*PI)*57.29577951;
+    } else if (heading*PrevHeading < 0 && heading < -2) {
+      // Wrapping from positive to negative
+      DiffHeading = (heading-PrevHeading+2*PI)*57.29577951;
+    } else {
+      DiffHeading = (heading-PrevHeading)*57.29577951;
+    }
+    
+    _sm -> stepper.rotate(-DiffHeading*0.625); // gear ratio = 20/32 = 0.625
+    if (_sm -> stepper.calcStepsForRotation(-DiffHeading*0.625) != 0){
+      PrevHeading = heading;
+    }
     stepperPrevTime = millis();
   }
 
@@ -87,6 +101,8 @@ State *flight::update()
   Serial.print(pitch * 57.29577951);
   Serial.print(" | ");
   Serial.println(heading * 57.29577951);
+
+  
 
   // Never leave state
   return this;

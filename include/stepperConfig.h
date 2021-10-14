@@ -3,8 +3,8 @@
 #define RPM 550
 
 // All the wires needed for full functionality
-#define DIR 28
-#define STEP 29
+#define DIR A0
+#define STEP A1
 
 // Since microstepping is set externally, make sure this matches the selected mode
 // 1=full step, 2=half step etc.

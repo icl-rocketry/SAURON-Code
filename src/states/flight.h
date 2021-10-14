@@ -19,6 +19,8 @@ class flight: public State {
         float xAcc, yAcc, zAcc;
         float xGyro, yGyro, zGyro;
         float xMag, yMag, zMag;
+        float PrevHeading{0};
+        float DiffHeading;
         uint32_t filterPrevTime{0};
         uint32_t stepperPrevTime{0};
 };
