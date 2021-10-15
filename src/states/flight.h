@@ -8,21 +8,22 @@
 #ifndef FLIGHT_H
 #define FLIGHT_H
 
-class flight: public State {
-    public:
-        flight(stateMachine* sm);
-        void initialise();
-        State* update();
-        void exitState();
+class flight : public State
+{
+public:
+    flight(stateMachine *sm);
+    void initialise();
+    State *update();
+    void exitState();
 
-    private:
-        float xAcc, yAcc, zAcc;
-        float xGyro, yGyro, zGyro;
-        float xMag, yMag, zMag;
-        float PrevHeading{0};
-        float DiffHeading;
-        uint32_t filterPrevTime{0};
-        uint32_t stepperPrevTime{0};
+private:
+    float xAcc, yAcc, zAcc;
+    float xGyro, yGyro, zGyro;
+    float xMag, yMag, zMag;
+    float PrevHeading{0};
+    float DiffHeading;
+    uint32_t filterPrevTime{0};
+    uint32_t stepperPrevTime{0};
 };
 
 #endif

@@ -35,20 +35,19 @@ State *flight::update()
   _sm->imu.readMag();
   // Serial.print("readMag  " + String(millis() - prevTime) + "\n"); // < 4 millis
 
-
   // Pre-calibration
   // xMag = -_sm->imu.calcAccel(_sm->imu.mx);
   // yMag = -_sm->imu.calcAccel(_sm->imu.my);
   // zMag = _sm->imu.calcAccel(_sm->imu.mz);
 
   prevTime = millis();
-  float subbed_imu_mx = (_sm->imu.mx - 0.46288029784302);
-  float subbed_imu_my = (_sm->imu.my - 1.01246637335654);
-  float subbed_imu_mz = (_sm->imu.mz + 0.72659380318724);
+  subbed_imu_mx = (_sm->imu.mx - 0.46288029784302);
+  subbed_imu_my = (_sm->imu.my - 1.01246637335654);
+  subbed_imu_mz = (_sm->imu.mz + 0.72659380318724);
 
-  float cal_imu_mx = 1.391743393369 * subbed_imu_mx - 0.091636916484 * subbed_imu_my - 0.014574125665 * subbed_imu_mz;
-  float cal_imu_my = -0.916369164849 * subbed_imu_mx + 1.2520273342610 * subbed_imu_my + 0.076717134777 * subbed_imu_mz;
-  float cal_imu_mz = -0.014574125666 * subbed_imu_mx + 0.0767171347770 * subbed_imu_my + 1.310715522801 * subbed_imu_mz;
+  cal_imu_mx = 1.391743393369 * subbed_imu_mx - 0.091636916484 * subbed_imu_my - 0.014574125665 * subbed_imu_mz;
+  cal_imu_my = -0.916369164849 * subbed_imu_mx + 1.2520273342610 * subbed_imu_my + 0.076717134777 * subbed_imu_mz;
+  cal_imu_mz = -0.014574125666 * subbed_imu_mx + 0.0767171347770 * subbed_imu_my + 1.310715522801 * subbed_imu_mz;
   // Serial.print("caliBrate  " + String(millis() - prevTime) + "\n"); // < 4 millis
 
   prevTime = millis();
@@ -57,12 +56,10 @@ State *flight::update()
   zMag = -_sm->imu.calcAccel(cal_imu_mz);
   // Serial.print("calcMag  " + String(millis() - prevTime) + "\n"); // < 4 millis
 
-
   // Get actual dt
   uint32_t actualDt = millis() - filterPrevTime;
   filterPrevTime = millis();
   _sm->filter.setDeltaT((float)actualDt / 1000.0);
-  
 
   prevTime = millis();
   _sm->filter.update(xGyro, yGyro, zGyro, xAcc, yAcc, zAcc, xMag, yMag, zMag);
@@ -77,20 +74,27 @@ State *flight::update()
   float pitch = _sm->filter.getPitch();
   float heading = _sm->filter.getYaw();
 
-  if ((millis() - stepperPrevTime) > .1){
+  if ((millis() - stepperPrevTime) > .1)
+  {
     // Heading wrap-around error-catching
-    if (heading*PrevHeading < 0 && heading > 2) {
+    if (heading * PrevHeading < 0 && heading > 2)
+    {
       // Wrapping from negative to positive
-      DiffHeading = (heading-PrevHeading-2*PI)*57.29577951;
-    } else if (heading*PrevHeading < 0 && heading < -2) {
-      // Wrapping from positive to negative
-      DiffHeading = (heading-PrevHeading+2*PI)*57.29577951;
-    } else {
-      DiffHeading = (heading-PrevHeading)*57.29577951;
+      DiffHeading = (heading - PrevHeading - 2 * PI) * 57.29577951;
     }
-    
-    _sm -> stepper.rotate(-DiffHeading*0.625); // gear ratio = 20/32 = 0.625
-    if (_sm -> stepper.calcStepsForRotation(-DiffHeading*0.625) != 0){
+    else if (heading * PrevHeading < 0 && heading < -2)
+    {
+      // Wrapping from positive to negative
+      DiffHeading = (heading - PrevHeading + 2 * PI) * 57.29577951;
+    }
+    else
+    {
+      DiffHeading = (heading - PrevHeading) * 57.29577951;
+    }
+
+    _sm->stepper.rotate(-DiffHeading * 0.625); // gear ratio = 20/32 = 0.625
+    if (_sm->stepper.calcStepsForRotation(-DiffHeading * 0.625) != 0)
+    {
       PrevHeading = heading;
     }
     stepperPrevTime = millis();
@@ -101,8 +105,6 @@ State *flight::update()
   Serial.print(pitch * 57.29577951);
   Serial.print(" | ");
   Serial.println(heading * 57.29577951);
-
-  
 
   // Never leave state
   return this;
