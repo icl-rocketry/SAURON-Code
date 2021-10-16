@@ -41,13 +41,13 @@ State *flight::update()
   // zMag = _sm->imu.calcAccel(_sm->imu.mz);
 
   prevTime = millis();
-  subbed_imu_mx = (_sm->imu.mx - 0.46288029784302);
-  subbed_imu_my = (_sm->imu.my - 1.01246637335654);
-  subbed_imu_mz = (_sm->imu.mz + 0.72659380318724);
+  float subbed_imu_mx = (_sm->imu.mx - 0.46288029784302);
+  float subbed_imu_my = (_sm->imu.my - 1.01246637335654);
+  float subbed_imu_mz = (_sm->imu.mz + 0.72659380318724);
 
-  cal_imu_mx = 1.391743393369 * subbed_imu_mx - 0.091636916484 * subbed_imu_my - 0.014574125665 * subbed_imu_mz;
-  cal_imu_my = -0.916369164849 * subbed_imu_mx + 1.2520273342610 * subbed_imu_my + 0.076717134777 * subbed_imu_mz;
-  cal_imu_mz = -0.014574125666 * subbed_imu_mx + 0.0767171347770 * subbed_imu_my + 1.310715522801 * subbed_imu_mz;
+  float cal_imu_mx = 1.391743393369 * subbed_imu_mx - 0.091636916484 * subbed_imu_my - 0.014574125665 * subbed_imu_mz;
+  float cal_imu_my = -0.916369164849 * subbed_imu_mx + 1.2520273342610 * subbed_imu_my + 0.076717134777 * subbed_imu_mz;
+  float cal_imu_mz = -0.014574125666 * subbed_imu_mx + 0.0767171347770 * subbed_imu_my + 1.310715522801 * subbed_imu_mz;
   // Serial.print("caliBrate  " + String(millis() - prevTime) + "\n"); // < 4 millis
 
   prevTime = millis();
